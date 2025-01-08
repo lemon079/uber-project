@@ -4,6 +4,7 @@ import express from "express";
 import connectToDb from "./connection/db.connection.js";
 import userRoutes from "./routes/user.routes.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -12,6 +13,7 @@ connectToDb();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
