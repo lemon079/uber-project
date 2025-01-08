@@ -305,6 +305,153 @@ The request body should be a JSON object containing the following fields:
   }
   ```
 
+# Captain Login Endpoint
+
+## POST /captain/login
+
+### Description
+This endpoint is used to log in an existing captain. It requires the captain's email and password.
+
+### Request Body
+The request body should be a JSON object containing the following fields:
+- `email`: (string) The email address of the captain. Must be a valid email format.
+- `password`: (string) The password for the captain. Must be at least 8 characters long.
+
+### Example Request
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "password123"
+}
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "token": "jwt_token",
+    "captain": {
+      "_id": "captain_id",
+      "fullName": {
+        "firstName": "Jane",
+        "lastName": "Doe"
+      },
+      "email": "jane.doe@example.com",
+      "socketId": null,
+      "status": "inactive",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "field_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+#### Authentication Errors
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Invalid Email or Password"
+  }
+  ```
+
+#### Server Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+# Captain Profile Endpoint
+
+## GET /captain/profile
+
+### Description
+This endpoint is used to get the profile of the logged-in captain. It requires the captain to be authenticated.
+
+### Request Headers
+- `Authorization`: (string) The JWT token of the logged-in captain.
+
+### Example Request
+```http
+GET /captain/profile HTTP/1.1
+Host: example.com
+Authorization: Bearer jwt_token
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "_id": "captain_id",
+    "fullName": {
+      "firstName": "Jane",
+      "lastName": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "socketId": null,
+    "status": "inactive",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "location": {
+      "lat": null,
+      "lng": null
+    }
+  }
+  ```
+
+#### Authentication Errors
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Server Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
 # Captain Logout Endpoint
 
 ## GET /captain/logout
@@ -381,6 +528,38 @@ router.get("/profile", authUser, handleUserProfile);
 
 #### Server Errors
 
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "message": "Error message"
+  }
+  ```
+
+## authCaptain
+
+### Description
+This middleware is used to authenticate the captain by verifying the JWT token.
+
+### Example Usage
+```javascript
+import { authCaptain } from "../middlewares/auth.middleware.js";
+
+router.get("/profile", authCaptain, handleCaptainProfile);
+```
+
+### Errors
+
+#### Authentication Errors
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Server Errors
 - **Status Code**: 400 Bad Request
 - **Response Body**:
   ```json

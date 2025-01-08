@@ -40,11 +40,27 @@ async function handleCaptainRegister(req, res) {
 
 async function handleCaptainLogin(req, res) {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     return res.status(400).json({ error: errors.array() });
   }
 
-  const { fullName, email, password, vehicle } = req.body;
+  const { email, password } = req.body;
+  const captain = await Captain.findOne({ email }).select("+password");
+
+  if (!captain) {
+    return res.status(401).json({ message: "Invalid Email or Password" });
+  }
+
+  const isMatch = await captain.comparePassword(password);
+
+  if (!isMatch) {
+    return res.status(401).json({ message: "Invalid Email or Password" });
+  }
+
+  const token = captain.generateAuthToken();
+
+  return res.status(200).json({ captain, token });
 }
 
 async function handleCaptainLogout(req, res) {
@@ -55,4 +71,13 @@ async function handleCaptainLogout(req, res) {
   return res.status(200).json({ message: "Logged Out" });
 }
 
-export { handleCaptainRegister, handleCaptainLogin, handleCaptainLogout };
+async function handleCaptainProfile(req, res) {
+  return res.status(200).json(req.captain);
+}
+
+export {
+  handleCaptainRegister,
+  handleCaptainLogin,
+  handleCaptainLogout,
+  handleCaptainProfile,
+};
