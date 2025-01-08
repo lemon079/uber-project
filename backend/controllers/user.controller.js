@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
-import User from "../models/user.models.js";
-import BlackListToken from "../models/blackListToken.models.js";
-import { createUser } from "../services/user.services.js";
+import User from "../models/user.model.js";
+import BlackListToken from "../models/blackListToken.model.js";
+import { createUser } from "../services/user.service.js";
 
 async function handleUserRegister(req, res) {
   const errors = validationResult(req);
@@ -11,8 +11,13 @@ async function handleUserRegister(req, res) {
   }
 
   const { fullName, email, password } = req.body;
+
   try {
-    const hashedPassword = await User.hashPassword(password);
+    const hashedPassword = await User.hashedPassword(password);
+    const isUserExist = await User.findOne({ email });
+    if (isUserExist) {
+      return res.status(400).json({ message: "User already Exists" });
+    }
 
     const user = await createUser({
       firstName: fullName.firstName,

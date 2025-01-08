@@ -214,6 +214,143 @@ Authorization: Bearer jwt_token
   }
   ```
 
+# Captain Registration Endpoint
+
+## POST /captain/register
+
+### Description
+This endpoint is used to register a new captain. It requires the captain's first name, last name, email, password, and vehicle details.
+
+### Request Body
+The request body should be a JSON object containing the following fields:
+- `fullName.firstName`: (string) The first name of the captain. Must be at least 3 characters long.
+- `fullName.lastName`: (string) The last name of the captain. Must be at least 3 characters long.
+- `email`: (string) The email address of the captain. Must be a valid email format.
+- `password`: (string) The password for the captain. Must be at least 8 characters long.
+- `vehicle.color`: (string) The color of the vehicle. Must be at least 3 characters long.
+- `vehicle.plate`: (string) The vehicle number plate. Must be at least 3 characters long.
+- `vehicle.capacity`: (number) The capacity of the vehicle. Must be at least 1.
+- `vehicle.vehicleType`: (string) The type of the vehicle. Must be one of ["car", "motorcycle", "auto"].
+
+### Example Request
+```json
+{
+  "fullName": {
+    "firstName": "Jane",
+    "lastName": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 201 Created
+- **Response Body**:
+  ```json
+  {
+    "captain": {
+      "_id": "captain_id",
+      "fullName": {
+        "firstName": "Jane",
+        "lastName": "Doe"
+      },
+      "email": "jane.doe@example.com",
+      "socketId": null,
+      "status": "inactive",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    },
+    "token": "jwt_token"
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "field_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+#### Server Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+# Captain Logout Endpoint
+
+## GET /captain/logout
+
+### Description
+This endpoint is used to log out the captain. It requires the captain to be authenticated.
+
+### Request Headers
+- `Authorization`: (string) The JWT token of the logged-in captain.
+
+### Example Request
+```http
+GET /captain/logout HTTP/1.1
+Host: example.com
+Authorization: Bearer jwt_token
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "message": "Logged Out"
+  }
+  ```
+
+#### Authentication Errors
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Server Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
 # Middleware
 
 ## authUser
