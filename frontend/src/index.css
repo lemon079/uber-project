@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "UberMove";
+    src: url("/fonts/UberMoveBold.ttf") format("woff2");
+    font-style: normal;
+    font-weight: 800; /* Match the actual font weight */
+  }
+
+  @font-face {
+    font-family: "UberMove";
+    src: url("/fonts/UberMoveMedium.ttf") format("woff2");
+    font-style: normal;
+    font-weight: 700; /* Match the actual font weight */
+  }
+
+  body {
+    font-family: "UberMove", sans-serif; /* Apply directly */
+  }
+}
+
+@layer components {
+  .form-warning{
+    @apply text-red-500
+  }
+  .form-input{
+    @apply p-2 w-full bg-gray-200 rounded outline-0;
+  }
+}
+
+@layer utilities {
+}
