@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import FormWarning from "./FormWarning";
+import FormWarning from "../Components/shared/FormWarning";
 
 const Login = ({ formType }) => {
   const {
