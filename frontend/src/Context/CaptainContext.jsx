@@ -1,13 +1,13 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
-const CaptainContext = ({children}) => {
-  
-  const CaptainDataContext = createContext();
-  const captain = "";
+export const CaptainDataContext = createContext();
+
+const CaptainContext = ({ children }) => {
+  const [captain, setCaptain] = useState();
 
   return (
     <>
-      <CaptainDataContext.Provider value={captain}>
+      <CaptainDataContext.Provider value={{ captain, setCaptain }}>
         {children}
       </CaptainDataContext.Provider>
     </>
