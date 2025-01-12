@@ -3,7 +3,7 @@ import Captain from "../models/captain.model.js";
 import { createCaptain } from "../services/captain.service.js";
 import BlackListToken from "../models/blackListToken.model.js";
 
-async function handleCaptainRegister(req, res) {
+async function handleCaptainSignup(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ error: errors.array() });
@@ -76,7 +76,7 @@ async function handleCaptainProfile(req, res) {
 }
 
 export {
-  handleCaptainRegister,
+  handleCaptainSignup,
   handleCaptainLogin,
   handleCaptainLogout,
   handleCaptainProfile,

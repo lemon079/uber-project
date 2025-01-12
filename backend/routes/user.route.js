@@ -4,13 +4,13 @@ import {
   handleUserlogin,
   handleUserLogout,
   handleUserProfile,
-  handleUserRegister,
+  handleUserSignup,
 } from "../controllers/user.controller.js";
 import { authUser } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.post(
-  "/register",
+  "/signup",
   [
     body("email").isEmail().withMessage("Invalid Email"),
     body("fullName.firstName")
@@ -23,7 +23,7 @@ router.post(
       .isLength({ min: 8 })
       .withMessage("Password Length must be 8 or more"),
   ],
-  handleUserRegister
+  handleUserSignup
 );
 
 router.post(

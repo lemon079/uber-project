@@ -1,17 +1,17 @@
 import express from "express";
 import { body } from "express-validator";
 import {} from "../controllers/user.controller.js";
-import { authCaptain, authUser } from "../middlewares/auth.middleware.js";
+import { authCaptain } from "../middlewares/auth.middleware.js";
 import {
   handleCaptainLogin,
   handleCaptainLogout,
   handleCaptainProfile,
-  handleCaptainRegister,
+  handleCaptainSignup,
 } from "../controllers/captain.controller.js";
 const router = express.Router();
 
 router.post(
-  "/register",
+  "/signup",
   [
     body("email").isEmail().withMessage("Invalid Email"),
     body("fullName.firstName")
@@ -36,7 +36,7 @@ router.post(
       .isIn(["car", "motorcycle", "auto"])
       .withMessage("Invalid Vehicle Type"),
   ],
-  handleCaptainRegister
+  handleCaptainSignup
 );
 router.post("/login", handleCaptainLogin);
 router.get("/logout", authCaptain, handleCaptainLogout);

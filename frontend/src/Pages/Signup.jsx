@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import Logo from "../Components/shared/Logo";
 
 const Signup = ({ formType }) => {
   const {
@@ -23,13 +24,7 @@ const Signup = ({ formType }) => {
 
   return (
     <section>
-      <figure className="w-full h-full ml-7 mt-7">
-        <img
-          src={formType === "User" ? "/logo-user.png" : "/logo-captain.png"}
-          alt="logo"
-          className={formType === "User" ? "w-20 h-8" : "w-20 h-12"}
-        />
-      </figure>
+      <Logo formType={formType} />
       <section className="mx-7 mt-8 flex flex-col gap-40 justify-between">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           {/* First and Last Name */}

@@ -1,10 +1,10 @@
-# User Registration Endpoint
+# User Signup Endpoint
 
-## POST /user/register
+## POST /user/signup
 
 ### Description
 
-This endpoint is used to register a new user. It requires the user's first name, last name, email, and password.
+This endpoint is used to signup a new user. It requires the user's first name, last name, email, and password.
 
 ### Request Body
 
@@ -214,12 +214,12 @@ Authorization: Bearer jwt_token
   }
   ```
 
-# Captain Registration Endpoint
+# Captain Signup Endpoint
 
-## POST /captain/register
+## POST /captain/signup
 
 ### Description
-This endpoint is used to register a new captain. It requires the captain's first name, last name, email, password, and vehicle details.
+This endpoint is used to signup a new captain. It requires the captain's first name, last name, email, password, and vehicle details.
 
 ### Request Body
 The request body should be a JSON object containing the following fields:

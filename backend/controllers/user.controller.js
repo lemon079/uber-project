@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import BlackListToken from "../models/blackListToken.model.js";
 import { createUser } from "../services/user.service.js";
 
-async function handleUserRegister(req, res) {
+async function handleUserSignup(req, res) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -73,7 +73,7 @@ async function handleUserProfile(req, res) {
 }
 
 export {
-  handleUserRegister,
+  handleUserSignup,
   handleUserlogin,
   handleUserLogout,
   handleUserProfile,
