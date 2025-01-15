@@ -5,9 +5,9 @@ import FormWarning from "../Components/shared/FormWarning";
 import Logo from "../Components/shared/Logo";
 import axios from "axios";
 import { UserDataContext } from "../Context/UserContext";
+import { CaptainDataContext } from "../Context/CaptainContext";
 
-const Login = ({ formType }) => {
-  
+const Login = ({ type }) => {
   const {
     register,
     handleSubmit,
@@ -19,34 +19,48 @@ const Login = ({ formType }) => {
     },
   });
 
-  
   const navigate = useNavigate();
   const { setUser } = useContext(UserDataContext);
+  const { setCaptain } = useContext(CaptainDataContext);
 
   const onSubmit = async (values) => {
-    const data = {
-      email: values.email,
-      password: values.password,
-    };
+    let data;
+    if (type === "User") {
+      data = {
+        email: values.email,
+        password: values.password,
+      };
+    } else if (type === "Captain") {
+      data = {
+        email: values.email,
+        password: values.password,
+      };
+    }
 
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}${
-        formType === "User" ? "/user/login" : "/captain/login"
+        type === "User" ? "/user/login" : "/captain/login"
       }`,
       data
     );
 
     if (response.status === 200) {
-      setUser(response.data.user);
-      localStorage.setItem("token", response.data.token);
-      navigate("/home");
+      if (type === "User") {
+        setUser(response.data.user);
+        localStorage.setItem("token", response.data.token);
+        navigate("/home");
+      } else if (type === "Captain") {
+        setCaptain(response.data.captain);
+        localStorage.setItem("token", response.data.token);
+        navigate("/home");
+      }
     }
   };
 
   return (
     <section>
-      <Logo formType={formType} />
-      <section className="mx-7 mt-8 flex flex-col gap-40 justify-between h-[80vh]">
+      <Logo type={type} />
+      <section className="mx-7 mt-8 flex flex-col gap-40 justify-between h-[calc(100vh - 20vh)]">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           {/* Email Input */}
           <div className="flex flex-col gap-2">
@@ -89,7 +103,7 @@ const Login = ({ formType }) => {
             </button>
             <p className="text-center">
               Don't Have an Account?{" "}
-              {formType === "User" ? (
+              {type === "User" ? (
                 <Link to={"/user/signup"} className="text-blue-500">
                   Signup
                 </Link>
@@ -101,7 +115,7 @@ const Login = ({ formType }) => {
             </p>
           </div>
         </form>
-        {formType === "User" ? (
+        {type === "User" ? (
           <Link
             to={"/captain/login"}
             className="text-lg block text-center w-full bg-green-400 text-black p-2 mt-2 rounded"

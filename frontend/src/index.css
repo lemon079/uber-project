@@ -23,11 +23,25 @@
 }
 
 @layer components {
-  .form-warning{
-    @apply text-red-500
+  .form-warning {
+    @apply text-red-500;
   }
-  .form-input{
-    @apply p-2 w-full bg-gray-200 rounded outline-0;
+  .form-input {
+    @apply p-2 w-full bg-gray-200 rounded-lg font-extrabold outline-0;
+  }
+
+  /* Line  */
+  .line-container {
+    @apply h-[65%] flex flex-col gap-1 items-center absolute top-[50%] translate-y-[-50%] left-9 w-3;
+  }
+  .line-container__circle {
+    @apply rounded-full w-2 p-0.5 bg-white border-[3.5px] border-black;
+  }
+  .line-container__line {
+    @apply w-[0.2rem] h-full bg-black;
+  }
+  .line-container__square {
+    @apply w-2 p-0.5 bg-white border-[3.5px] border-black;
   }
 }
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Logout = ({ formType = "User" }) => {
+const Logout = ({ type = "User" }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -10,7 +10,7 @@ const Logout = ({ formType = "User" }) => {
     (async () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}${
-          formType === "User" ? "/user/logout" : "/captain/logout"
+          type === "User" ? "/user/logout" : "/captain/logout"
         }`,
         {
           headers: {
