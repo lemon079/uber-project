@@ -1,25 +1,57 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { CaptainDataContext } from "../Context/CaptainContext";
+import axios from "axios";
 
 const ProtectRoute = ({ element, type = "User" }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { user } = useContext(UserDataContext);
-  const { captain } = useContext(CaptainDataContext);
+  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (type === "User") {
-      if (!user || !token) {
-        navigate("/user/login");
+    const checkAccess = async () => {
+      if (
+        !token ||
+        (type === "User" && !user) ||
+        (type === "Captain" && !captain)
+      ) {
+        navigate(type === "User" ? "/user/login" : "/captain/login");
+        return;
       }
-    } else if (type === "Captain") {
-      if (!captain || !token) {
-        navigate("/user/login");
+
+      try {
+        const endpoint = type === "User" ? "/user/profile" : "/captain/profile";
+        const { data, status } = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}${endpoint}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (status === 200) {
+          if (type === "Captain") {
+            setCaptain(data.captain);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        navigate(type === "Captain" ? "/captain/login" : "/user/login");
+      } finally {
+        setIsLoading(false);
       }
-    }
-  }, [type === "User" ? user : captain, token]);
+    };
+
+    checkAccess();
+  }, [token, type === "User" ? user : captain]);
+
+  if (isLoading) {
+    return <div className="animate-spin">Loading</div>;
+  }
 
   return element;
 };

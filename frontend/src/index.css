@@ -27,12 +27,12 @@
     @apply text-red-500;
   }
   .form-input {
-    @apply p-2 w-full bg-gray-200 rounded-lg font-extrabold outline-0;
+    @apply p-2 w-full bg-gray-200 rounded-lg text-black outline-black;
   }
 
   /* Line  */
   .line-container {
-    @apply h-[65%] flex flex-col gap-1 items-center absolute top-[50%] translate-y-[-50%] left-9 w-3;
+    @apply h-[55%] flex flex-col gap-1 items-center absolute left-9 top-[45%] translate-y-[-50%];
   }
   .line-container__circle {
     @apply rounded-full w-2 p-0.5 bg-white border-[3.5px] border-black;

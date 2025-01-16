@@ -15,6 +15,7 @@ async function handleUserSignup(req, res) {
   try {
     const hashedPassword = await User.hashPassword(password);
     const isUserExist = await User.findOne({ email });
+
     if (isUserExist) {
       return res.status(400).json({ message: "User already Exists" });
     }
