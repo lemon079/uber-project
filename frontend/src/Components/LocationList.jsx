@@ -25,7 +25,7 @@ const locations = [
   },
 ];
 
-const LocationList = ({ setIsVehiclePanelOpen }) => {
+const LocationList = () => {
   return (
     <>
       {locations.map((location, index) => (
@@ -33,7 +33,6 @@ const LocationList = ({ setIsVehiclePanelOpen }) => {
           key={index}
           title={location.title}
           address={location.address}
-          setIsVehiclePanelOpen={setIsVehiclePanelOpen}
         />
       ))}
     </>

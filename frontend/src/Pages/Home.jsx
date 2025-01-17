@@ -1,21 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { gsap } from "gsap";
-import { SlArrowDown } from "react-icons/sl";
 import LocationList from "../Components/LocationList";
-import VehicleCard from "../Components/cards/VehicleCard";
-import { FaClock } from "react-icons/fa";
 import { useGSAP } from "@gsap/react";
 import VehicleList from "../Components/VehicleList";
+import ConfirmRide from "../Components/ConfirmRide";
+import { UserDataContext } from "../Context/UserContext";
+import ArrowDownAnimated from "../Components/shared/ArrowDownAnimated";
 
 const Home = () => {
-  gsap.registerPlugin(useGSAP);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [isVehiclePanelOpen, setIsVehiclePanelOpen] = useState(false);
-  const [isConfirmRidePanelOpen, setIsConfirmRidePanelOpen] = useState(false);
+  const { isLocationPanelOpen, setIsLocationPanelOpen } =
+    useContext(UserDataContext);
 
-  const panelRef = useRef(null);
-  const vehiclePanelRef = useRef(null);
+  const locationPanelRef = useRef(null);
   const arrowIcon = useRef(null);
 
   const {
@@ -40,33 +37,22 @@ const Home = () => {
       duration: 0.5,
     });
 
-    const panelHeight = isPanelOpen ? "100%" : "30%";
-    const arrowRotation = isPanelOpen ? "0deg" : "180deg";
+    const panelHeight = isLocationPanelOpen ? "100%" : "30%";
+    const arrowRotation = isLocationPanelOpen ? "0deg" : "180deg";
 
-    gsap.to(panelRef.current, {
+    gsap.to(locationPanelRef.current, {
       height: panelHeight,
     });
 
     gsap.to(arrowIcon.current, {
       rotate: arrowRotation,
     });
-  }, [isPanelOpen]);
-
-  useGSAP(() => {
-    const vehiclePanelTranslateY = isVehiclePanelOpen ? "0%" : "100%";
-
-    gsap.to(vehiclePanelRef.current, {
-      translateY: vehiclePanelTranslateY,
-      onStart: () => {
-        setIsPanelOpen(false);
-      },
-    });
-  }, [isVehiclePanelOpen]);
+  }, [isLocationPanelOpen]);
 
   return (
     <section className="relative">
       <figure className="absolute w-16 top-10 left-5">
-        <img src="/assets/logo-user.png" alt="logo" />
+        <img src="/assets/logo-user.webp" alt="logo" />
       </figure>
       <figure className="w-screen h-screen">
         <img
@@ -75,16 +61,10 @@ const Home = () => {
         />
       </figure>
       <section
-        ref={panelRef}
+        ref={locationPanelRef}
         className="flex flex-col p-5 gap-5 bg-white absolute bottom-0 left-0 w-full rounded-tl-3xl rounded-tr-3xl h-[30%]"
       >
-        <div
-          ref={arrowIcon}
-          className="w-full rotate-[180deg] cursor-pointer"
-          onClick={() => setIsPanelOpen((prev) => !prev)}
-        >
-          <SlArrowDown className="w-full" />
-        </div>
+        <ArrowDownAnimated panelType="LocationPanel" />
         <div className="flex flex-col gap-5">
           <h2 className="text-2xl font-extrabold">Find a trip</h2>
           <form
@@ -104,7 +84,7 @@ const Home = () => {
               {...register("pickUpLocation", {
                 required: "Pick-up location is required",
               })}
-              onClick={() => setIsPanelOpen(true)}
+              onClick={() => setIsLocationPanelOpen(true)}
             />
             {errors.pickUpLocation && <p>{errors.pickUpLocation.message}</p>}
             <input
@@ -115,7 +95,7 @@ const Home = () => {
               {...register("destination", {
                 required: "Destination is required",
               })}
-              onClick={() => setIsPanelOpen(true)}
+              onClick={() => setIsLocationPanelOpen(true)}
             />
             {errors.destination && <p>{errors.destination.message}</p>}
             <button type="submit"></button>
@@ -123,30 +103,14 @@ const Home = () => {
         </div>
         <div
           className={`${
-            isPanelOpen ? "block h-[70%] overflow-y-scroll" : "hidden"
+            isLocationPanelOpen ? "block h-[70%] overflow-y-scroll" : "hidden"
           }`}
         >
-          <LocationList setIsVehiclePanelOpen={setIsVehiclePanelOpen} />
+          <LocationList />
         </div>
       </section>
-
-      <section
-        ref={vehiclePanelRef}
-        className="fixed bottom-0 left-0 w-full h-[55vh] z-10 bg-white translate-y-full"
-      >
-        <div className="m-5 flex flex-col gap-5">
-          <button className="w-fit flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full shadow-md">
-            <FaClock className="text-black text-sm" />
-            <span className="text-black text-sm font-medium">Leave Now</span>
-            <SlArrowDown className="text-black text-sm" />
-          </button>
-          <div className="flex flex-col gap-3">
-            <VehicleList
-              setIsConfirmRidePanelOpen={setIsConfirmRidePanelOpen}
-            />
-          </div>
-        </div>
-      </section>
+      <VehicleList />
+      <ConfirmRide />
     </section>
   );
 };

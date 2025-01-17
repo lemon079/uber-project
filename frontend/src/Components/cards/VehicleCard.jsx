@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaUser } from "react-icons/fa";
+import { UserDataContext } from "../../Context/UserContext";
 
 const VehicleCard = ({
   title,
@@ -9,17 +10,20 @@ const VehicleCard = ({
   description,
   price,
   image,
-  setIsConfirmRidePanelOpen,
 }) => {
+  const { setIsConfirmRidePanelOpen, setIsVehiclePanelOpen } =
+    useContext(UserDataContext);
+
   return (
     <div
       className="flex items-start justify-between p-4 border rounded-lg shadow-md bg-white"
       onClick={() => {
         setIsConfirmRidePanelOpen(true);
+        setIsVehiclePanelOpen(false);
       }}
     >
       <div className="flex items-center gap-3">
-        <img src={image} alt="Car" className="w-16 h-16 object-cover" />
+        <img src={image.url} alt={image.alt} className="w-16 h-16 object-cover" />
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-extrabold">{title}</h3>

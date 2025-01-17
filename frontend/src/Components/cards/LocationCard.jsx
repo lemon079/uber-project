@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { UserDataContext } from "../../Context/UserContext";
 
-const LocationCard = ({ title, address, setIsVehiclePanelOpen }) => {
+const LocationCard = ({ title, address }) => {
+  const { setIsVehiclePanelOpen } = useContext(UserDataContext);
+
   return (
     <div
       className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md"
-      onClick={() => setIsVehiclePanelOpen((prev) => !prev)}
+      onClick={() => {
+        setIsVehiclePanelOpen(true)
+      }}
     >
-      <div className="">
+      <div>
         <FaMapMarkerAlt className="flex items-center justify-center w-10 h-10 p-2  bg-gray-100 rounded-full" />
       </div>
 

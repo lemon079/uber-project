@@ -33,7 +33,7 @@ router.post(
       .isInt({ min: 1 })
       .withMessage("Vehicle Capacity must be atleast 1"),
     body("vehicle.vehicleType")
-      .isIn(["car", "motorcycle", "auto"])
+      .isIn(["car", "bike", "auto"])
       .withMessage("Invalid Vehicle Type"),
   ],
   handleCaptainSignup

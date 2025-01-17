@@ -230,7 +230,7 @@ The request body should be a JSON object containing the following fields:
 - `vehicle.color`: (string) The color of the vehicle. Must be at least 3 characters long.
 - `vehicle.plate`: (string) The vehicle number plate. Must be at least 3 characters long.
 - `vehicle.capacity`: (number) The capacity of the vehicle. Must be at least 1.
-- `vehicle.vehicleType`: (string) The type of the vehicle. Must be one of ["car", "motorcycle", "auto"].
+- `vehicle.vehicleType`: (string) The type of the vehicle. Must be one of ["car", "bike", "auto"].
 
 ### Example Request
 ```json

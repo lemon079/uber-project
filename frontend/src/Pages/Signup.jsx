@@ -164,7 +164,7 @@ const Signup = ({ type }) => {
                   >
                     <option value="">Select Vehicle Type</option>
                     <option value="car">Car</option>
-                    <option value="motorcycle">Motorcycle</option>
+                    <option value="bike">Bike</option>
                     <option value="auto">Auto</option>
                   </select>
                   {errors.vehicleType && (
