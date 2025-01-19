@@ -48,11 +48,11 @@ const Login = ({ type }) => {
       if (type === "User") {
         setUser(response.data.user);
         localStorage.setItem("token", response.data.token);
-        navigate("/home");
+        navigate("/user/home");
       } else if (type === "Captain") {
         setCaptain(response.data.captain);
         localStorage.setItem("token", response.data.token);
-        navigate("/home");
+        navigate("/captain/home");
       }
     }
   };

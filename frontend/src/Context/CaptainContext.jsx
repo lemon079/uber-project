@@ -4,10 +4,18 @@ export const CaptainDataContext = createContext();
 
 const CaptainContext = ({ children }) => {
   const [captain, setCaptain] = useState();
+  const [isRideRequestPanelOpen, setIsRideRequestPanelOpen] = useState(false);
 
   return (
     <>
-      <CaptainDataContext.Provider value={{ captain, setCaptain }}>
+      <CaptainDataContext.Provider
+        value={{
+          captain,
+          setCaptain,
+          isRideRequestPanelOpen,
+          setIsRideRequestPanelOpen,
+        }}
+      >
         {children}
       </CaptainDataContext.Provider>
     </>

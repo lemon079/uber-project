@@ -14,8 +14,6 @@ const UserContext = ({ children }) => {
 
   const [isLocationPanelOpen, setIsLocationPanelOpen] = useState(false);
   const [isVehiclePanelOpen, setIsVehiclePanelOpen] = useState(false);
-  const [isConfirmRidePanelOpen, setIsConfirmRidePanelOpen] = useState(false);
-  
 
   return (
     <>
@@ -27,8 +25,6 @@ const UserContext = ({ children }) => {
           setIsLocationPanelOpen,
           isVehiclePanelOpen,
           setIsVehiclePanelOpen,
-          isConfirmRidePanelOpen,
-          setIsConfirmRidePanelOpen,
         }}
       >
         {children}

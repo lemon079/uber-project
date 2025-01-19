@@ -65,12 +65,11 @@ const Signup = ({ type }) => {
       if (type === "User") {
         setUser(response.data.user);
         localStorage.setItem("token", response.data.token);
-        navigate("/home");
+        navigate("/user/home");
       } else if (type === "Captain") {
-        console.log(response);
         setCaptain(response.data.captain);
         localStorage.setItem("token", response.data.token);
-        navigate("/home");
+        navigate("/captain/home");
       }
     }
   };
@@ -177,7 +176,7 @@ const Signup = ({ type }) => {
                     Plate Number
                   </label>
                   <input
-                    className="form-input"
+                    className="form-input uppercase"
                     id="plate"
                     type="text"
                     {...register("plate", {

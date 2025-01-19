@@ -3,8 +3,10 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { UserDataContext } from "../../Context/UserContext";
 import { SlArrowDown } from "react-icons/sl";
+import { CaptainDataContext } from "../../Context/CaptainContext";
+import initializeGsapDefaults from "../../utils/constants";
 
-const ArrowDownAnimated = ({ panelType = "LocationPanel" }) => {
+const ArrowDownAnimated = ({ panelType }) => {
   const arrowIconRef = useRef(null);
   const {
     isLocationPanelOpen,
@@ -15,12 +17,14 @@ const ArrowDownAnimated = ({ panelType = "LocationPanel" }) => {
     setIsConfirmRidePanelOpen,
   } = useContext(UserDataContext);
 
-  gsap.registerPlugin(useGSAP);
+  const { isRideRequestPanelOpen, setIsRideRequestPanelOpen } =
+    useContext(CaptainDataContext);
 
   const getPanelState = () => {
     if (panelType === "LocationPanel") return isLocationPanelOpen;
     if (panelType === "VehiclePanel") return isVehiclePanelOpen;
     if (panelType === "ConfirmRidePanel") return isConfirmRidePanelOpen;
+    if (panelType === "RideRequestPanel") return isRideRequestPanelOpen;
   };
 
   const togglePanelState = () => {
@@ -38,26 +42,29 @@ const ArrowDownAnimated = ({ panelType = "LocationPanel" }) => {
       if (isConfirmRidePanelOpen) {
         setIsVehiclePanelOpen(true);
       }
+    } else if (panelType === "RideRequestPanel") {
+      setIsRideRequestPanelOpen((prev) => !prev);
     }
   };
 
   useGSAP(() => {
-    gsap.defaults({
-      ease: "power2.out",
-      duration: 0.5,
-    });
-
+    initializeGsapDefaults();
     const arrowRotation = getPanelState() ? "0deg" : "180deg";
 
     gsap.to(arrowIconRef.current, {
       rotate: arrowRotation,
     });
-  }, [isLocationPanelOpen, isVehiclePanelOpen, isConfirmRidePanelOpen]);
+  }, [
+    isLocationPanelOpen,
+    isVehiclePanelOpen,
+    isConfirmRidePanelOpen,
+    isRideRequestPanelOpen,
+  ]);
 
   return (
     <div
       ref={arrowIconRef}
-      className="w-full rotate-[180deg] cursor-pointer"
+      className="w-full rotate-[180deg] cursor-pointer mb-4"
       onClick={togglePanelState}
     >
       <SlArrowDown className="w-full" />

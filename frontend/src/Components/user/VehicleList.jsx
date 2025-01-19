@@ -3,17 +3,14 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SlArrowDown } from "react-icons/sl";
 import { FaClock } from "react-icons/fa";
-import VehicleCard from "../Components/cards/VehicleCard";
-import { UserDataContext } from "../Context/UserContext";
-import ArrowDownAnimated from "./shared/ArrowDownAnimated";
+import VehicleCard from "../cards/VehicleCard";
+import { UserDataContext } from "../../Context/UserContext";
+import ArrowDownAnimated from "../shared/ArrowDownAnimated";
+import initializeGsapDefaults from "../../utils/constants";
 
 const VehicleList = () => {
-  const {
-    isVehiclePanelOpen,
-    setIsVehiclePanelOpen,
-    isLocationPanelOpen,
-    setIsLocationPanelOpen,
-  } = useContext(UserDataContext);
+  const { isVehiclePanelOpen, setIsLocationPanelOpen } =
+    useContext(UserDataContext);
 
   const vehicles = [
     {
@@ -48,10 +45,7 @@ const VehicleList = () => {
   const vehiclePanelRef = useRef(null);
 
   useGSAP(() => {
-    gsap.defaults({
-      ease: "power2.out",
-      duration: 0.5,
-    });
+    initializeGsapDefaults();
     const vehiclePanelTranslateY = isVehiclePanelOpen ? "0%" : "100%";
     gsap.to(vehiclePanelRef.current, {
       translateY: vehiclePanelTranslateY,
@@ -62,7 +56,7 @@ const VehicleList = () => {
   }, [isVehiclePanelOpen]);
 
   return (
-    <section ref={vehiclePanelRef} className="active-panel">
+    <section ref={vehiclePanelRef} className="active-panel translate-y-full">
       <ArrowDownAnimated panelType="VehiclePanel" />
       <div className="flex flex-col gap-5">
         <button className="w-fit flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full shadow-md">
@@ -70,7 +64,7 @@ const VehicleList = () => {
           <span className="text-black text-sm font-medium">Leave Now</span>
           <SlArrowDown className="text-black text-sm" />
         </button>
-        <div className="flex flex-col gap-3">
+        <div className="space-y-3">
           {vehicles.map((vehicle, index) => (
             <VehicleCard
               key={index}

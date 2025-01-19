@@ -1,30 +1,24 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { gsap } from "gsap";
-import LocationList from "../Components/LocationList";
+import LocationList from "../Components/user/LocationList";
 import { useGSAP } from "@gsap/react";
-import VehicleList from "../Components/VehicleList";
-import ConfirmRide from "../Components/ConfirmRide";
+import VehicleList from "../Components/user/VehicleList";
 import { UserDataContext } from "../Context/UserContext";
 import ArrowDownAnimated from "../Components/shared/ArrowDownAnimated";
+import CaptainStats from "../Components/captain/CaptainStats";
+import initializeGsapDefaults from "../utils/constants";
+import RideRequest from "../Components/captain/RideRequest";
+import ConfirmRide from "../Components/shared/ConfirmRide";
 
-const Home = () => {
+const Home = ({ type }) => {
   const { isLocationPanelOpen, setIsLocationPanelOpen } =
     useContext(UserDataContext);
 
-  const locationPanelRef = useRef(null);
-  const arrowIcon = useRef(null);
+  const { handleSubmit } = useForm();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      pickUpLocation: "",
-      destination: "",
-    },
-  });
+  const locationPanelRef = useRef();
+  const arrowIcon = useRef();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -32,11 +26,7 @@ const Home = () => {
   };
 
   useGSAP(() => {
-    gsap.defaults({
-      ease: "power2.out",
-      duration: 0.5,
-    });
-
+    initializeGsapDefaults();
     const panelHeight = isLocationPanelOpen ? "100%" : "30%";
     const arrowRotation = isLocationPanelOpen ? "0deg" : "180deg";
 
@@ -60,57 +50,91 @@ const Home = () => {
           className="w-full h-full object-cover"
         />
       </figure>
-      <section
-        ref={locationPanelRef}
-        className="flex flex-col p-5 gap-5 bg-white absolute bottom-0 left-0 w-full rounded-tl-3xl rounded-tr-3xl h-[30%]"
-      >
-        <ArrowDownAnimated panelType="LocationPanel" />
-        <div className="flex flex-col gap-5">
-          <h2 className="text-2xl font-extrabold">Find a trip</h2>
-          <form
-            className="flex flex-col gap-4 relative"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="line-container">
-              <div className="line-container__circle "></div>
-              <div className="line-container__line"></div>
-              <div className="line-container__square"></div>
-            </div>
-            <input
-              className="form-input px-16 py-4"
-              id="pickUpLocation"
-              type="text"
-              placeholder="Enter Location"
-              {...register("pickUpLocation", {
-                required: "Pick-up location is required",
-              })}
-              onClick={() => setIsLocationPanelOpen(true)}
-            />
-            {errors.pickUpLocation && <p>{errors.pickUpLocation.message}</p>}
-            <input
-              className="form-input px-16 py-4"
-              id="destination"
-              type="text"
-              placeholder="Enter Destination"
-              {...register("destination", {
-                required: "Destination is required",
-              })}
-              onClick={() => setIsLocationPanelOpen(true)}
-            />
-            {errors.destination && <p>{errors.destination.message}</p>}
-            <button type="submit"></button>
-          </form>
-        </div>
-        <div
-          className={`${
-            isLocationPanelOpen ? "block h-[70%] overflow-y-scroll" : "hidden"
-          }`}
+      {type === "User" ? (
+        <section
+          ref={locationPanelRef}
+          className="flex flex-col p-5 gap-5 bg-white absolute bottom-0 left-0 w-full rounded-t-3xl h-[30%]"
         >
-          <LocationList />
-        </div>
-      </section>
-      <VehicleList />
-      <ConfirmRide />
+          <ArrowDownAnimated panelType="LocationPanel" />
+          <div className="flex flex-col gap-5">
+            <h2 className="text-2xl font-extrabold">Find a trip</h2>
+            <form
+              className="flex flex-col gap-4 relative"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="line-container">
+                <div className="line-container__circle "></div>
+                <div className="line-container__line"></div>
+                <div className="line-container__square"></div>
+              </div>
+              <input
+                className="form-input px-16 py-4"
+                id="pickUpLocation"
+                type="text"
+                placeholder="Enter Location"
+                onClick={() => setIsLocationPanelOpen(true)}
+              />
+              <input
+                className="form-input px-16 py-4"
+                id="destination"
+                type="text"
+                placeholder="Enter Destination"
+                onClick={() => setIsLocationPanelOpen(true)}
+              />
+              <button type="submit"></button>
+            </form>
+          </div>
+          <div
+            className={`${
+              isLocationPanelOpen ? "block h-[70%] overflow-y-scroll" : "hidden"
+            }`}
+          >
+            <LocationList />
+          </div>
+          <VehicleList />
+          <ConfirmRide type="User" />
+          {/*
+              these two lines dont execute panel going back animation , but make the component load only when needed 
+              {isVehiclePanelOpen && <VehicleList />}
+              {isUserConfirmRidePanelOpen && <ConfirmRide type="User" />}
+            */}
+        </section>
+      ) : (
+        type === "Captain" && (
+          // captain home
+          <section className="p-5 bg-white absolute bottom-0 left-0 w-full rounded-t-3xl">
+            <section className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <figure className="w-16 h-16 flex items-center gap-4">
+                  <img
+                    src="https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww"
+                    alt="user"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </figure>
+                <div className="capitalize font-extrabold text-2xl">
+                  <h2>John Doe</h2>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-extrabold text-2xl">₹295.53</h3>
+                <h4 className="text-gray-500 text-right">Earned</h4>
+              </div>
+            </section>
+            <section className="mt-5">
+              <CaptainStats />
+
+              <RideRequest />
+              <ConfirmRide type={"Captain"} />
+              {/*
+              these two lines dont execute panel going back animation , but make the component load only when needed 
+              {isRideRequestPanelOpen && <RideRequest />}
+              {isCaptainConfirmRidePanelOpen && <ConfirmRide type={"Captain"} />}
+               */}
+            </section>
+          </section>
+        )
+      )}
     </section>
   );
 };

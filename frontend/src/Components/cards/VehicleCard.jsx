@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { FaUser } from "react-icons/fa";
 import { UserDataContext } from "../../Context/UserContext";
+import { SharedContextData } from "../../Context/Shared";
 
 const VehicleCard = ({
   title,
@@ -11,35 +12,39 @@ const VehicleCard = ({
   price,
   image,
 }) => {
-  const { setIsConfirmRidePanelOpen, setIsVehiclePanelOpen } =
-    useContext(UserDataContext);
+  const { setIsConfirmRidePanelOpen } = useContext(SharedContextData);
+  const { setIsVehiclePanelOpen } = useContext(UserDataContext);
 
   return (
     <div
-      className="flex items-start justify-between p-4 border rounded-lg shadow-md bg-white"
+      className="vehicle-card-container"
       onClick={() => {
         setIsConfirmRidePanelOpen(true);
         setIsVehiclePanelOpen(false);
       }}
     >
-      <div className="flex items-center gap-3">
-        <img src={image.url} alt={image.alt} className="w-16 h-16 object-cover" />
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-extrabold">{title}</h3>
+      <div className="vehicle-info-section">
+        <img
+          src={image.url}
+          alt={image.alt}
+          className="vehicle-image"
+        />
+        <div className="vehicle-text-info">
+          <div className="vehicle-title-seats">
+            <h3 className="vehicle-card-title">{title}</h3>
             <div className="flex items-center">
               <FaUser />
               <span className="ml-1">{seats}</span>
             </div>
           </div>
-          <p className="text-sm">
+          <p className="vehicle-eta-time">
             {eta} • {time}
           </p>
-          <p className="text-sm text-gray-500">{description}</p>
+          <p className="vehicle-card-description">{description}</p>
         </div>
       </div>
-      <div className="text-right">
-        <p className="text-lg font-bold">₹{price}</p>
+      <div className="vehicle-price">
+        <p className="vehicle-price-text">₹{price}</p>
       </div>
     </div>
   );

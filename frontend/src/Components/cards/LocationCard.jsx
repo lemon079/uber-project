@@ -7,18 +7,20 @@ const LocationCard = ({ title, address }) => {
 
   return (
     <div
-      className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md"
+      className="location-card-container"
       onClick={() => {
-        setIsVehiclePanelOpen(true)
+        setIsVehiclePanelOpen(true);
       }}
     >
-      <div>
-        <FaMapMarkerAlt className="flex items-center justify-center w-10 h-10 p-2  bg-gray-100 rounded-full" />
+      {/* Location Icon */}
+      <div className="location-icon-container">
+        <FaMapMarkerAlt className="location-icon" />
       </div>
 
-      <div className="flex flex-col">
-        <h3 className="text-lg font-extrabold">{title}</h3>
-        <p className="text-sm text-gray-600">{address}</p>
+      {/* Location Text Content */}
+      <div className="location-text-content">
+        <h3 className="location-card-title">{title}</h3>
+        <p className="location-card-address">{address}</p>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import Logo from "../Components/shared/Logo";
 
 const StartPage = () => {
   return (
-    <div className="h-screen w-full flex flex-col justify-end bg-[url(/home.webp)] bg-left bg-cover bg-no-repeat">
+    <div className="h-screen w-full flex flex-col justify-end bg-[url(/assets/home.webp)] bg-left bg-cover bg-no-repeat">
       <Logo />
       <div className="bg-white p-4 flex flex-col gap-5 font-extrabold">
         <h2 className="text-2xl capitalize">Get Started With Uber</h2>

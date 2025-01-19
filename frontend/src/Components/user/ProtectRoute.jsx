@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { UserDataContext } from "../Context/UserContext";
+import { UserDataContext } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { CaptainDataContext } from "../Context/CaptainContext";
+import { CaptainDataContext } from "../../Context/CaptainContext";
 import axios from "axios";
 
 const ProtectRoute = ({ element, type = "User" }) => {

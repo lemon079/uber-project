@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App.jsx";
 import UserContext from "./Context/UserContext.jsx";
 import CaptainContext from "./Context/CaptainContext.jsx";
+import SharedContext from "./Context/Shared.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CaptainContext>
-      <UserContext>
-        <App />
-      </UserContext>
-    </CaptainContext>
+    <SharedContext>
+      <CaptainContext>
+        <UserContext>
+          <App />
+        </UserContext>
+      </CaptainContext>
+    </SharedContext>
   </StrictMode>
 );

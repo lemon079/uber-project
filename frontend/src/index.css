@@ -1,8 +1,11 @@
+/* Tailwind Base */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* --------------------------- Base Styles --------------------------- */
 @layer base {
+  /* UberMove Fonts */
   @font-face {
     font-family: "UberMove";
     src: url("/fonts/UberMoveBold.ttf") format("woff2");
@@ -17,36 +20,196 @@
     font-weight: 700; /* Match the actual font weight */
   }
 
+  /* Body Styles */
   body {
     font-family: "UberMove", sans-serif; /* Apply directly */
   }
 }
 
+/* --------------------------- Components --------------------------- */
 @layer components {
+  /* -------------------------- Form Components ------------------------- */
   .form-warning {
     @apply text-red-500;
   }
+
   .form-input {
     @apply p-2 w-full bg-gray-200 rounded-lg text-black outline-black;
   }
 
-  /* Line  */
+  /* -------------------------- Line Components ------------------------- */
   .line-container {
     @apply h-[55%] flex flex-col gap-1 items-center absolute left-9 top-[45%] translate-y-[-50%];
   }
+
   .line-container__circle {
     @apply rounded-full w-2 p-0.5 bg-white border-[3.5px] border-black;
   }
+
   .line-container__line {
     @apply w-[0.2rem] h-full bg-black;
   }
+
   .line-container__square {
     @apply w-2 p-0.5 bg-white border-[3.5px] border-black;
   }
+
+  /* ---------------------------- Location Card ---------------------------- */
+  .location-card-container {
+    @apply flex items-center gap-4 p-4 bg-white rounded-lg shadow-md;
+  }
+
+  .location-icon-container {
+    @apply w-10 h-10 p-2 bg-gray-100 rounded-full flex items-center justify-center;
+  }
+
+  .location-icon {
+    @apply text-xl text-gray-600;
+  }
+
+  .location-text-content {
+    @apply flex flex-col;
+  }
+
+  .location-card-title {
+    @apply text-lg font-extrabold;
+  }
+
+  .location-card-address {
+    @apply text-sm text-gray-600;
+  }
+
+  /* ---------------------------- Vehicle Card ---------------------------- */
+  .vehicle-card-container {
+    @apply flex items-start justify-between p-4 border rounded-lg shadow-md bg-white;
+  }
+
+  .vehicle-info-section {
+    @apply flex items-center gap-3;
+  }
+
+  .vehicle-image {
+    @apply w-16 h-16 object-cover;
+  }
+
+  .vehicle-text-info {
+    @apply flex flex-col;
+  }
+
+  .vehicle-title-seats {
+    @apply flex items-center gap-2;
+  }
+
+  .vehicle-card-title {
+    @apply text-lg font-extrabold;
+  }
+
+  .vehicle-eta-time {
+    @apply text-sm;
+  }
+
+  .vehicle-card-description {
+    @apply text-sm text-gray-500;
+  }
+
+  .vehicle-price {
+    @apply text-right;
+  }
+
+  .vehicle-price-text {
+    @apply text-lg font-bold;
+  }
+
+  /* ---------------------------- Captain Stats ---------------------------- */
+  .captain-stats {
+    @apply flex justify-around items-center bg-gray-100 p-5 rounded-xl shadow-md transition-all duration-300 cursor-pointer hover:bg-gray-200;
+  }
+
+  .captain-stats__item {
+    @apply flex flex-col items-center;
+  }
+
+  .captain-stats__icon {
+    @apply text-3xl mb-2 text-gray-700 transition-colors duration-300 group-hover:text-gray-900;
+  }
+
+  .captain-stats__value {
+    @apply text-xl font-bold text-gray-800;
+  }
+
+  .captain-stats__label {
+    @apply text-sm text-gray-500;
+  }
+
+  /* ---------------------------- Ride Request Popup ---------------------------- */
+  .ride-request {
+    @apply fixed bottom-0 left-0 right-0 bg-white shadow-lg rounded-t-3xl p-4 flex flex-col gap-5 px-5;
+  }
+
+  .ride-request__header {
+    @apply text-3xl font-extrabold text-gray-900 mb-3;
+  }
+
+  .ride-request__passenger {
+    @apply flex items-center gap-4 p-3 bg-gray-100 rounded-xl;
+  }
+
+  .ride-request__avatar {
+    @apply w-16 h-16 rounded-full object-cover;
+  }
+
+  .ride-request__name {
+    @apply font-extrabold text-2xl;
+  }
+
+  .ride-request__distance {
+    @apply text-black text-xl;
+  }
+
+  .ride-request__info {
+    @apply space-y-5;
+  }
+
+  .ride-request__row {
+    @apply flex items-center text-gray-600;
+  }
+
+  .ride-request__row--bordered {
+    @apply border-b-2 pb-4;
+  }
+
+  .ride-request__icon {
+    @apply mr-2 text-3xl text-black;
+  }
+
+  .ride-request__text {
+    @apply text-2xl text-black;
+
+    & > p {
+      @apply text-gray-500 text-xl;
+    }
+  }
+
+  .ride-request__actions {
+    @apply space-y-3;
+  }
+
+  .ride-request__button {
+    @apply flex-1 w-full text-lg py-2 rounded-lg;
+  }
+
+  .ride-request__button--confirm {
+    @apply bg-green-500 text-white hover:bg-green-600;
+  }
+
+  .ride-request__button--ignore {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+  }
 }
 
+/* ---------------------------- Utilities ---------------------------- */
 @layer utilities {
   .active-panel {
-    @apply fixed bottom-0 left-0 w-full z-10 bg-white translate-y-full p-5 rounded-tl-3xl rounded-tr-3xl;
+    @apply fixed bottom-0 left-0 bg-white w-full rounded-t-3xl p-5;
   }
 }
