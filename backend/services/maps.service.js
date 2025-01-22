@@ -1,9 +1,13 @@
 import axios from "axios";
+import { response } from "express";
 
 export const getAddressCoordinate = async (address) => {
+  const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+
   try {
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+    const url = `https://maps.gomaps.pro/maps/api/geocode/json?address=${encodeURIComponent(
+      address
+    )}&key=${API_KEY}`;
 
     const response = await axios.get(url);
 
@@ -18,3 +22,50 @@ export const getAddressCoordinate = async (address) => {
     throw error;
   }
 };
+
+export async function getDistanceTime(origin, destination) {
+  const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+
+  if (!origin || !destination) {
+    throw new Error("Origin and destination are required");
+  }
+  const url = `https://maps.gomaps.pro/maps/api/distancematrix/json?destinations=${encodeURIComponent(
+    destination
+  )}&origins=${encodeURIComponent(origin)}&key=${API_KEY}`;
+
+  try {
+    const response = await axios.get(url);
+    if (response.data.status === "OK") {
+      const { distance, duration, status } = response.data.rows[0].elements[0];
+      if (status !== "OK") throw new Error("Route Not Found");
+      return { distance: distance.text, duration: duration.text };
+    } else {
+      throw new Error("Unable to fetch distance and time");
+    }
+  } catch (error) {
+    console.error("Error fetching distance and time:", error.message);
+    throw error;
+  }
+}
+
+
+export async function getSuggestions(input) {
+  const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+
+  try {
+    const url = `https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${API_KEY}`;
+    const response = await axios.get(url);
+
+    if (response.data.status === "OK") {
+      return response.data.predictions.map(prediction => ({
+        description: prediction.description,
+        placeId: prediction.place_id
+      }));
+    } else {
+      throw new Error("Unable to fetch suggestions");
+    }
+  } catch (error) {
+    console.error("Error fetching suggestions:", error.message);
+    throw error;
+  }
+}

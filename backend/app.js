@@ -3,6 +3,8 @@ dotenv.config();
 import express from "express";
 import connectToDb from "./connection/db.connection.js";
 import userRoutes from "./routes/user.route.js";
+import mapRoutes from "./routes/map.route.js";
+
 import captainRoutes from "./routes/captain.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -18,7 +20,7 @@ app.use(cookieParser());
 
 app.use("/user", userRoutes);
 app.use("/captain", captainRoutes);
-
+app.use("/maps", mapRoutes);
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });

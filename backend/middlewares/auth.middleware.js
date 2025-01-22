@@ -1,5 +1,4 @@
 import User from "../models/user.model.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import BlackListToken from "../models/blackListToken.model.js";
 import Captain from "../models/captain.model.js";
