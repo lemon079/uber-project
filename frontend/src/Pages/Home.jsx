@@ -1,8 +1,7 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useRef, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { gsap } from "gsap";
 import LocationList from "../Components/user/LocationList";
-import { useGSAP } from "@gsap/react";
 import VehicleList from "../Components/user/VehicleList";
 import { UserDataContext } from "../Context/UserContext";
 import ArrowDownAnimated from "../Components/shared/ArrowDownAnimated";
@@ -10,8 +9,13 @@ import CaptainStats from "../Components/captain/CaptainStats";
 import initializeGsapDefaults from "../utils/constants";
 import RideRequest from "../Components/captain/RideRequest";
 import ConfirmRide from "../Components/shared/ConfirmRide";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useGSAP } from "@gsap/react";
 
 const Home = ({ type }) => {
+  const [userLocation, setUserLocation] = useState([37.7749, -122.4194]); // Default center
+  const [isLocationFetched, setIsLocationFetched] = useState(false); // Track user action
+
   const { isLocationPanelOpen, setIsLocationPanelOpen } =
     useContext(UserDataContext);
 
@@ -19,6 +23,26 @@ const Home = ({ type }) => {
 
   const locationPanelRef = useRef();
   const arrowIcon = useRef();
+
+  const handleFetchLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation([latitude, longitude]);
+          setIsLocationFetched(true);
+        },
+        (error) => {
+          console.error("Error fetching location:", error);
+          alert(
+            "Unable to fetch location. Please check your browser settings."
+          );
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  };
 
   const onSubmit = (data) => {
     console.log(data);
@@ -40,20 +64,43 @@ const Home = ({ type }) => {
   }, [isLocationPanelOpen]);
 
   return (
-    <section className="relative">
+    <section className="relative flex flex-col">
       <figure className="absolute w-16 top-10 left-5">
         <img src="/assets/logo-user.webp" alt="logo" />
       </figure>
-      <figure className="w-screen h-screen">
-        <img
-          src="https://simonpan.com/wp-content/themes/sp_portfolio/assets/uber-challenge.jpg"
-          className="w-full h-full object-cover"
-        />
-      </figure>
+
+      {!isLocationFetched ? (
+        <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
+          <button
+            onClick={handleFetchLocation}
+            className="bg-gray-300 font-extrabold px-6 py-3 rounded-lg"
+          >
+            Fetch My Location
+          </button>
+        </div>
+      ) : (
+        <MapContainer
+          className="w-full h-screen z-0"
+          center={userLocation}
+          zoom={17}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={userLocation}>
+            <Popup>
+              You are here! <br /> Latitude: {userLocation[0]} <br /> Longitude:{" "}
+              {userLocation[1]}
+            </Popup>
+          </Marker>
+        </MapContainer>
+      )}
+
       {type === "User" ? (
         <section
           ref={locationPanelRef}
-          className="flex flex-col p-5 gap-5 bg-white absolute bottom-0 left-0 w-full rounded-t-3xl h-[30%]"
+          className="flex flex-col p-5 gap-5 bg-white absolute bottom-0 left-0 w-full rounded-t-3xl"
         >
           <ArrowDownAnimated panelType="LocationPanel" />
           <div className="flex flex-col gap-5">
@@ -93,15 +140,9 @@ const Home = ({ type }) => {
           </div>
           <VehicleList />
           <ConfirmRide type="User" />
-          {/*
-              these two lines dont execute panel going back animation , but make the component load only when needed 
-              {isVehiclePanelOpen && <VehicleList />}
-              {isUserConfirmRidePanelOpen && <ConfirmRide type="User" />}
-            */}
         </section>
       ) : (
         type === "Captain" && (
-          // captain home
           <section className="p-5 bg-white absolute bottom-0 left-0 w-full rounded-t-3xl">
             <section className="flex justify-between items-center">
               <div className="flex items-center gap-3">
@@ -126,11 +167,6 @@ const Home = ({ type }) => {
 
               <RideRequest />
               <ConfirmRide type={"Captain"} />
-              {/*
-              these two lines dont execute panel going back animation , but make the component load only when needed 
-              {isRideRequestPanelOpen && <RideRequest />}
-              {isCaptainConfirmRidePanelOpen && <ConfirmRide type={"Captain"} />}
-               */}
             </section>
           </section>
         )
