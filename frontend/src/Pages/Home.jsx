@@ -46,7 +46,6 @@ const Home = ({ type }) => {
 
   const onSubmit = (data) => {
     console.log(data);
-    // Handle form submission, e.g., send data to the server
   };
 
   useGSAP(() => {
