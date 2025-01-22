@@ -567,31 +567,3 @@ router.get("/profile", authCaptain, handleCaptainProfile);
     "message": "Error message"
   }
   ```
-
-# Maps Service
-
-## Description
-The `maps.service.js` file contains a function to get the coordinates (latitude and longitude) for a given address using the Google Maps Geocoding API.
-
-## Function
-
-### `getAddressCoordinate(address)`
-
-#### Parameters
-- `address` (string): The address for which to fetch the coordinates.
-
-#### Returns
-- An object containing the latitude (`lat`) and longitude (`lng`) of the given address.
-
-#### Example
-```javascript
-import { getAddressCoordinate } from './maps.service.js';
-
-const address = '1600 Amphitheatre Parkway, Mountain View, CA';
-getAddressCoordinate(address)
-  .then(coordinates => {
-    console.log('Coordinates:', coordinates);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
