@@ -48,19 +48,17 @@ export async function getDistanceTime(origin, destination) {
   }
 }
 
-
 export async function getSuggestions(input) {
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
   try {
-    const url = `https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${API_KEY}`;
+    const url = `https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+      input
+    )}&key=${API_KEY}`;
     const response = await axios.get(url);
 
     if (response.data.status === "OK") {
-      return response.data.predictions.map(prediction => ({
-        description: prediction.description,
-        placeId: prediction.place_id
-      }));
+      return response.data.predictions;
     } else {
       throw new Error("Unable to fetch suggestions");
     }
