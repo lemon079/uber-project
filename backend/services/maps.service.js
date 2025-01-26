@@ -1,5 +1,4 @@
 import axios from "axios";
-import { response } from "express";
 
 export const getAddressCoordinate = async (address) => {
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
@@ -38,7 +37,7 @@ export async function getDistanceTime(origin, destination) {
     if (response.data.status === "OK") {
       const { distance, duration, status } = response.data.rows[0].elements[0];
       if (status !== "OK") throw new Error("Route Not Found");
-      return { distance: distance.text, duration: duration.text };
+      return { distance: distance.text, time: duration.text };
     } else {
       throw new Error("Unable to fetch distance and time");
     }
@@ -54,7 +53,7 @@ export async function getSuggestions(input) {
   try {
     const url = `https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=${encodeURIComponent(
       input
-    )}&key=${API_KEY}`;
+    )}&region=pk&key=${API_KEY}`;
     const response = await axios.get(url);
 
     if (response.data.status === "OK") {
