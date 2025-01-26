@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SlArrowDown } from "react-icons/sl";
@@ -7,10 +7,16 @@ import VehicleCard from "../cards/VehicleCard";
 import { UserDataContext } from "../../Context/UserContext";
 import ArrowDownAnimated from "../shared/ArrowDownAnimated";
 import initializeGsapDefaults from "../../utils/constants";
+import axios from "axios";
+import { SharedContextData } from "../../Context/Shared";
+import Loading from "../shared/Loading";
 
 const VehicleList = () => {
   const { isVehiclePanelOpen, setIsLocationPanelOpen } =
     useContext(UserDataContext);
+  const { pickUpLocation, destination } = useContext(SharedContextData);
+  const [fare, setFare] = useState({ car: 0, bike: 0, auto: 0 });
+  const [loading, setLoading] = useState(false); // New loading state
 
   const vehicles = [
     {
@@ -19,17 +25,17 @@ const VehicleList = () => {
       eta: "2 mins away",
       time: "15:24",
       description: "Affordable, compact rides",
-      price: "193.20",
       image: { url: "/assets/car.webp", alt: "Car" },
+      fareKey: "car", // Mapping to `fare.car`
     },
     {
-      title: "bike",
+      title: "Bike",
       seats: 1,
       eta: "3 mins away",
       time: "15:20",
       description: "Quick and affordable rides for one",
-      price: "80.50",
       image: { url: "/assets/bike.webp", alt: "Bike" },
+      fareKey: "bike", // Mapping to `fare.bike`
     },
     {
       title: "Auto",
@@ -37,8 +43,8 @@ const VehicleList = () => {
       eta: "7 mins away",
       time: "15:35",
       description: "Comfortable and economical rides",
-      price: "350.00",
       image: { url: "/assets/auto.webp", alt: "Auto" },
+      fareKey: "auto", // Mapping to `fare.auto`
     },
   ];
 
@@ -54,6 +60,32 @@ const VehicleList = () => {
       },
     });
   }, [isVehiclePanelOpen]);
+
+  async function fetchFare(pickUpLocation, destination) {
+    try {
+      setLoading(true); // Start loading
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/ride/fare`,
+        {
+          params: { origin: pickUpLocation, destination },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setFare(response.data); // Set the fare object { car, bike, auto }
+    } catch (error) {
+      console.error("Error fetching fare:", error);
+    } finally {
+      setLoading(false); // End loading
+    }
+  }
+
+  useEffect(() => {
+    if (pickUpLocation && destination) {
+      fetchFare(destination, pickUpLocation);
+    }
+  }, [destination, pickUpLocation]);
 
   return (
     <section ref={vehiclePanelRef} className="active-panel translate-y-full">
@@ -73,7 +105,9 @@ const VehicleList = () => {
               eta={vehicle.eta}
               time={vehicle.time}
               description={vehicle.description}
-              price={vehicle.price}
+              price={
+                loading ? <Loading /> : `Rs.${fare[vehicle.fareKey]}` // Show loading state
+              }
               image={{ url: vehicle.image.url, alt: vehicle.image.alt }}
             />
           ))}

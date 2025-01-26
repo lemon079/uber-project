@@ -39,7 +39,7 @@
 
   /* -------------------------- Line Components ------------------------- */
   .line-container {
-    @apply h-[55%] flex flex-col gap-1 items-center absolute left-9 top-[45%] translate-y-[-50%];
+    @apply h-[65%] flex flex-col gap-1 items-center absolute left-9 top-[45%] translate-y-[-50%];
   }
 
   .line-container__circle {

@@ -2,14 +2,15 @@ import React, { useContext } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { UserDataContext } from "../../Context/UserContext";
 
-const LocationCard = ({ title, address }) => {
+const LocationCard = ({ title, address, setSuggestions }) => {
   const { setIsVehiclePanelOpen } = useContext(UserDataContext);
 
   return (
     <div
       className="location-card-container"
       onClick={() => {
-        setIsVehiclePanelOpen(true);
+        // setIsVehiclePanelOpen(true);
+        setSuggestions([]);
       }}
     >
       {/* Location Icon */}
@@ -19,7 +20,7 @@ const LocationCard = ({ title, address }) => {
 
       {/* Location Text Content */}
       <div className="location-text-content">
-        <h3 className="location-card-title">{title}</h3>
+        <h3 className="location-card-title">{title.split(" ")[0]}</h3>
         <p className="location-card-address">{address}</p>
       </div>
     </div>

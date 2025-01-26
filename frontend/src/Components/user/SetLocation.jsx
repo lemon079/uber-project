@@ -1,20 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Loading from "../shared/Loading";
-import { UserDataContext } from "../../Context/UserContext";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
-const LocationList = ({
-  pickUpLocation,
-  destination,
-  setPickUpLocation,
-  setDestination,
-}) => {
+const SetLocation = ({ location, setLocation }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { setIsVehiclePanelOpen } = useContext(UserDataContext);
 
   const fetchSuggestions = async (input) => {
+    if (!input) return; // Prevent empty input calls
     setLoading(true);
     try {
       const response = await axios.get(
@@ -33,29 +27,22 @@ const LocationList = ({
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    if (suggestions.length === 0) {
-      if (pickUpLocation?.length > 2) {
-        fetchSuggestions(pickUpLocation);
-      } else if (destination?.length > 2) {
-        fetchSuggestions(destination);
-      } else {
-        setSuggestions([]); // Clear suggestions when input is too short
-      }
-    }
-  }, [pickUpLocation, destination]);
+    fetchSuggestions(location); // Fetch suggestions whenever the location input changes
+  }, [location]);
 
   return (
     <div className="relative">
       {loading && <Loading />}
-      {suggestions?.length > 0 && (
+      {suggestions.length > 0 && (
         <div className="suggestions-container">
           {suggestions.map((suggestion) => (
             <div
               key={suggestion.place_id}
               className="location-card-container"
               onClick={() => {
-                setPickUpLocation(suggestion.description);
+                setLocation(suggestion.description); // Update location on selection
                 setSuggestions([]);
               }}
             >
@@ -67,7 +54,8 @@ const LocationList = ({
               {/* Location Text Content */}
               <div className="location-text-content">
                 <h3 className="location-card-title">
-                  {suggestion.description.split(" ")[0]}
+                  {suggestion.description.split(",")[0]}{" "}
+                  {/* Split for better display */}
                 </h3>
                 <p className="location-card-address">
                   {suggestion.description}
@@ -81,4 +69,4 @@ const LocationList = ({
   );
 };
 
-export default LocationList;
+export default SetLocation;

@@ -24,11 +24,7 @@ const VehicleCard = ({
       }}
     >
       <div className="vehicle-info-section">
-        <img
-          src={image.url}
-          alt={image.alt}
-          className="vehicle-image"
-        />
+        <img src={image.url} alt={image.alt} className="vehicle-image" />
         <div className="vehicle-text-info">
           <div className="vehicle-title-seats">
             <h3 className="vehicle-card-title">{title}</h3>
@@ -44,7 +40,7 @@ const VehicleCard = ({
         </div>
       </div>
       <div className="vehicle-price">
-        <p className="vehicle-price-text">₹{price}</p>
+        <p className="vehicle-price-text">{price}</p>
       </div>
     </div>
   );

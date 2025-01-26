@@ -1,8 +1,5 @@
 import React, { useRef, useContext, useState } from "react";
-import { useForm } from "react-hook-form";
 import { gsap } from "gsap";
-import LocationList from "../Components/user/LocationList";
-import VehicleList from "../Components/user/VehicleList";
 import { UserDataContext } from "../Context/UserContext";
 import ArrowDownAnimated from "../Components/shared/ArrowDownAnimated";
 import CaptainStats from "../Components/captain/CaptainStats";
@@ -11,15 +8,23 @@ import RideRequest from "../Components/captain/RideRequest";
 import ConfirmRide from "../Components/shared/ConfirmRide";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useGSAP } from "@gsap/react";
+import SetLocation from "../Components/user/SetLocation";
+import VehicleList from "../Components/user/VehicleList";
+import { SharedContextData } from "../Context/Shared";
 
 const Home = ({ type }) => {
   const [userLocation, setUserLocation] = useState([37.7749, -122.4194]); // Default center
   const [isLocationFetched, setIsLocationFetched] = useState(false); // Track user action
+  const { pickUpLocation, setPickUpLocation, destination, setDestination } =
+    useContext(SharedContextData);
+  const [activeInput, setActiveInput] = useState("");
 
-  const { isLocationPanelOpen, setIsLocationPanelOpen } =
-    useContext(UserDataContext);
-
-  const { handleSubmit } = useForm();
+  const {
+    isLocationPanelOpen,
+    setIsLocationPanelOpen,
+    isVehiclePanelOpen,
+    setIsVehiclePanelOpen,
+  } = useContext(UserDataContext);
 
   const locationPanelRef = useRef();
   const arrowIcon = useRef();
@@ -42,10 +47,6 @@ const Home = ({ type }) => {
     } else {
       alert("Geolocation is not supported by your browser.");
     }
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
   };
 
   useGSAP(() => {
@@ -104,12 +105,9 @@ const Home = ({ type }) => {
           <ArrowDownAnimated panelType="LocationPanel" />
           <div className="flex flex-col gap-5">
             <h2 className="text-2xl font-extrabold">Find a trip</h2>
-            <form
-              className="flex flex-col gap-4 relative"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form className="flex flex-col gap-4 relative">
               <div className="line-container">
-                <div className="line-container__circle "></div>
+                <div className="line-container__circle"></div>
                 <div className="line-container__line"></div>
                 <div className="line-container__square"></div>
               </div>
@@ -117,27 +115,57 @@ const Home = ({ type }) => {
                 className="form-input px-16 py-4"
                 id="pickUpLocation"
                 type="text"
-                placeholder="Enter Location"
-                onClick={() => setIsLocationPanelOpen(true)}
+                placeholder="Enter Pick Up Location"
+                value={pickUpLocation}
+                onChange={(e) => setPickUpLocation(e.target.value)}
+                onClick={() => {
+                  setIsLocationPanelOpen(true);
+                  setActiveInput("pickUpLocation");
+                }}
               />
               <input
                 className="form-input px-16 py-4"
                 id="destination"
                 type="text"
                 placeholder="Enter Destination"
-                onClick={() => setIsLocationPanelOpen(true)}
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                onClick={() => {
+                  setIsLocationPanelOpen(true);
+                  setActiveInput("destination");
+                }}
               />
-              <button type="submit"></button>
             </form>
+            <button
+              disabled={pickUpLocation?.length < 3 || destination?.length < 3}
+              className={`${
+                !isLocationPanelOpen ? "hidden" : "block"
+              } bg-black text-white font-extrabold px-6 py-3 rounded-lg disabled:bg-gray-500`}
+              onClick={() => setIsVehiclePanelOpen(true)}
+            >
+              Find Ride
+            </button>
           </div>
           <div
             className={`${
               isLocationPanelOpen ? "block h-[70%] overflow-y-scroll" : "hidden"
             }`}
           >
-            <LocationList />
+            {activeInput === "pickUpLocation" &&
+              pickUpLocation?.length >= 3 && (
+                <SetLocation
+                  location={pickUpLocation}
+                  setLocation={setPickUpLocation}
+                />
+              )}
+            {activeInput === "destination" && destination?.length >= 3 && (
+              <SetLocation
+                location={destination}
+                setLocation={setDestination}
+              />
+            )}
           </div>
-          <VehicleList />
+          {isVehiclePanelOpen && <VehicleList />}
           <ConfirmRide type="User" />
         </section>
       ) : (
